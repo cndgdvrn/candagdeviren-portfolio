@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import ChevronRight from '../components/icons/ChevronRight';
 import styles from '../styles/Explorer.module.css';
 
@@ -29,7 +28,6 @@ const explorerItems = [
 ];
 
 const Explorer = () => {
-  const router = useRouter();
   const [portfolioOpen, setPortfolioOpen] = useState(true);
 
   return (
@@ -55,29 +53,17 @@ const Explorer = () => {
           style={portfolioOpen ? { display: 'block' } : { display: 'none' }}
         >
           {explorerItems.map((item) => (
-            <div
-              key={item.name}
-              className={styles.file}
-              onClick={() => {
-                const event = new CustomEvent('addTab', {
-                  detail: {
-                    icon: `/${item.icon}`,
-                    filename: item.name,
-                    path: item.path
-                  }
-                });
-                window.dispatchEvent(event);
-                router.push(item.path);
-              }}
-            >
-              <Image
-                src={`/${item.icon}`}
-                alt={item.name}
-                height={18}
-                width={18}
-              />{' '}
-              <p>{item.name}</p>
-            </div>
+            <Link href={item.path} key={item.name}>
+              <div className={styles.file}>
+                <Image
+                  src={`/${item.icon}`}
+                  alt={item.name}
+                  height={18}
+                  width={18}
+                />{' '}
+                <p>{item.name}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

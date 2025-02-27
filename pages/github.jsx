@@ -38,12 +38,12 @@ const GithubPage = ({ repos, user }) => {
           <RepoCard key={repo.id} repo={repo} />
         ))}
       </div>
-      <div className={styles.contributions}>
+      <div style={{padding:"2rem 0rem 0rem 1rem"}} className={styles.contributions}>
         <GitHubCalendar
           username={process.env.NEXT_PUBLIC_GITHUB_USERNAME}
-          theme={theme}
-          hideColorLegend
-          hideMonthLabels
+          theme={theme}   
+          showWeekdayLabels
+           
         />
       </div>
     </>
@@ -61,7 +61,6 @@ export async function getStaticProps() {
   );
   
   const user = await userRes.json();
-  console.log(user);
 
   try {
     const repoRes = await fetch(
@@ -74,18 +73,16 @@ export async function getStaticProps() {
     );
     
     let repos = await repoRes.json();
-    console.log("API'den gelen repos yanıtı:", repos); // Hata ayıklama için
-    
-    // Eğer repos bir dizi değilse veya hata mesajı içeriyorsa
+
+
     if (!Array.isArray(repos)) {
-      console.error("API yanıtı dizi değil:", repos);
-      repos = []; // Boş dizi ile devam et
+      repos = []; 
     }
     
-    // Şimdi sort işlemini güvenli bir şekilde yapabiliriz
+
     repos = repos
       .sort((a, b) => b.stargazers_count - a.stargazers_count)
-      .slice(0, 6);
+      .slice(0, 16);
 
     return {
       props: { title: 'GitHub', repos, user },
