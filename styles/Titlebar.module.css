@@ -9,6 +9,7 @@
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 0.85rem;
   border-bottom: 1px solid #191d20;
+  z-index: 1000;
 }
 
 .items {
@@ -54,6 +55,14 @@
 
 .close {
   background: #ff5555;
+}
+
+.terminalItem {
+  cursor: pointer;
+}
+
+.terminalItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @media screen and (max-width: 900px) {

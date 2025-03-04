@@ -1,7 +1,11 @@
 import Image from 'next/image';
 import styles from '../styles/Titlebar.module.css';
+import { useContext } from 'react';
+import { TerminalContext } from '../contexts/TerminalContext';
 
 const Titlebar = () => {
+  const { toggleTerminal } = useContext(TerminalContext);
+
   return (
     <section className={styles.titlebar}>
       <Image
@@ -17,7 +21,7 @@ const Titlebar = () => {
         <p>View</p>
         <p>Go</p>
         <p>Run</p>
-        <p>Terminal</p>
+        <p className={styles.terminalItem} onClick={toggleTerminal}>Terminal</p>
         <p>Help</p>
       </div>
       <p className={styles.title}>Can Dağdeviren - Visual Studio Code</p>

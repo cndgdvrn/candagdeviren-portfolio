@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar'
 import Explorer from '../components/Explorer'
 import Bottombar from '../components/Bottombar'
 import Tabsbar from './Tabsbar'
+import TerminalButton from './TerminalButton'
 import styles from '../styles/Layout.module.css'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -17,6 +18,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Titlebar />
+      <TerminalButton />
       <div className={styles.main}>
         <Sidebar />
         <Explorer />

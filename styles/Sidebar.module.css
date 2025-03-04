@@ -6,6 +6,7 @@
   width: 4.5vw;
   min-width: 40px;
   height: calc(100vh - 30px - 25px);
+  z-index: 900;
 }
 
 .iconContainer {

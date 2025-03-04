@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Head from "../components/Head";
 import "../styles/globals.css";
 import "../styles/themes.css";
+import { TerminalProvider } from "../contexts/TerminalContext";
 
 function MyApp({ Component, pageProps }) {
 
@@ -16,10 +17,12 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <Layout>
-      <Head title={`Can Dağdeviren | ${pageProps.title}`} />
-      <Component {...pageProps} />
-    </Layout>
+    <TerminalProvider>
+      <Layout>
+        <Head title={`Can Dağdeviren | ${pageProps.title}`} />
+        <Component {...pageProps} />
+      </Layout>
+    </TerminalProvider>
   );
 }
 

@@ -4,6 +4,7 @@
   color: rgb(225, 228, 232);
   font-family: 'Source Sans Pro', sans-serif;
   border-right: 1px solid var(--explorer-border);
+  z-index: 900;
 }
 
 .title {
