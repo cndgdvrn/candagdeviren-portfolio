@@ -21,12 +21,12 @@ const Terminal = ({ onClose }) => {
   const lastOutputRef = useRef(null);
   const [cursorPosition, setCursorPosition] = useState(0);
 
-  // Terminal görünürlük animasyonu için
+  // Terminal visibility animation
   useEffect(() => {
     setIsTerminalVisible(true);
   }, []);
 
-  // Geliştirilmiş dosya sistemi
+  // Enhanced file system
   const fileSystem = {
     '~': {
       type: 'directory',
@@ -83,7 +83,7 @@ const Terminal = ({ onClose }) => {
     }
   };
 
-  // Komut renklendirme fonksiyonu
+  // Syntax highlighting function
   const syntaxHighlight = (cmd) => {
     const commands = ['ls', 'cd', 'cat', 'pwd', 'echo', 'help', 'mkdir', 'touch', 'rm', 'clear', 'exit', 'date', 'version', 'fortune'];
     const options = ['-l', '-r', '-rf'];
@@ -105,7 +105,7 @@ const Terminal = ({ onClose }) => {
     return parts.join(' ');
   };
 
-  // Komutu işleme ve ilgili fonksiyona yönlendirme
+  // Process command and route to relevant function
   const processCommand = (cmd) => {
     const args = cmd.trim().split(' ');
     const command = args[0].toLowerCase();
@@ -144,7 +144,7 @@ const Terminal = ({ onClose }) => {
       case '':
         return '';
       default:
-        // Daha bilgilendirici hata mesajı
+        // More informative error message
         const similarCommands = ['ls', 'cd', 'cat', 'pwd', 'echo', 'help', 'mkdir', 'touch', 'rm', 'clear', 'exit', 'date', 'version', 'fortune'].filter(
           cmd => cmd.startsWith(command)
         );
@@ -157,7 +157,7 @@ const Terminal = ({ onClose }) => {
     }
   };
 
-  // ls komutu
+  // ls command
   const handleLs = (args) => {
     const currentDir = getCurrentDirectory();
     if (!currentDir || currentDir.type !== 'directory') {
@@ -167,7 +167,7 @@ const Terminal = ({ onClose }) => {
     const hasL = args.includes('-l');
     
     if (hasL) {
-      // ls -l uzun format
+      // ls -l long format
       let result = '';
       Object.entries(currentDir.content).forEach(([name, item]) => {
         const type = item.type === 'directory' ? 'd' : '-';
@@ -186,7 +186,7 @@ const Terminal = ({ onClose }) => {
     return { html: coloredOutput };
   };
 
-  // cd komutu
+  // cd command
   const handleCd = (args) => {
     if (args.length < 2 || args[1] === '~') {
       setPath('~');
@@ -212,7 +212,7 @@ const Terminal = ({ onClose }) => {
     return `cd: ${targetPath}: No such directory`;
   };
 
-  // cat komutu
+  // cat command
   const handleCat = (args) => {
     if (args.length < 2) {
       return 'Usage: cat <file_name>';
@@ -228,17 +228,17 @@ const Terminal = ({ onClose }) => {
     return `cat: ${fileName}: No such file`;
   };
 
-  // pwd komutu
+  // pwd command
   const handlePwd = () => {
     return path.replace('~', '/home/user');
   };
 
-  // echo komutu
+  // echo command
   const handleEcho = (args) => {
     return args.slice(1).join(' ');
   };
 
-  // help komutu
+  // help command
   const handleHelp = () => {
     return `Available commands:
   ls [-l]                - List directory contents (-l for long format)
@@ -263,7 +263,7 @@ Tips:
 - Keyboard shortcut: Use Ctrl+\` to open/close the terminal`;
   };
 
-  // mkdir komutu - yeni dizin oluşturma
+  // mkdir command - create new directory
   const handleMkdir = (args) => {
     if (args.length < 2) {
       return 'Usage: mkdir <dir_name>';
@@ -276,7 +276,7 @@ Tips:
       return `mkdir: ${dirName}: File or directory already exists`;
     }
 
-    // Yeni dizin oluştur
+    // Create new directory
     currentDir.content[dirName] = {
       type: 'directory',
       content: {}
@@ -285,7 +285,7 @@ Tips:
     return `Directory "${dirName}" created`;
   };
 
-  // touch komutu - yeni dosya oluşturma
+  // touch command - create new file
   const handleTouch = (args) => {
     if (args.length < 2) {
       return 'Usage: touch <file_name>';
@@ -295,10 +295,10 @@ Tips:
     const currentDir = getCurrentDirectory();
 
     if (currentDir.content[fileName]) {
-      return ''; // touch mevcut dosyaları sessizce günceller
+      return ''; // touch silently updates existing files
     }
 
-    // Yeni dosya oluştur
+    // Create new file
     currentDir.content[fileName] = {
       type: 'file',
       content: ''
@@ -307,7 +307,7 @@ Tips:
     return '';
   };
 
-  // rm komutu - dosya/dizin silme
+  // rm command - remove file/directory
   const handleRm = (args) => {
     if (args.length < 2) {
       return 'Usage: rm [-r] <file/directory>';
@@ -334,23 +334,23 @@ Tips:
       return `rm: ${target}: Use -r option to remove a directory`;
     }
 
-    // Dosya/dizini sil
+    // Delete file/directory
     delete currentDir.content[target];
     return '';
   };
   
-  // date komutu - tarih ve saati gösterme
+  // date command - show date and time
   const handleDate = () => {
     const now = new Date();
     return now.toLocaleString();
   };
   
-  // version komutu - terminal versiyonu
+  // version command - terminal version
   const handleVersion = () => {
     return 'Terminal v1.1.0 - Enhanced Edition\nDeveloped by Can Dağdeviren';
   };
   
-  // fortune komutu - rastgele geliştirici sözleri
+  // fortune command - random developer quotes
   const handleFortune = () => {
     const quotes = [
       "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. – Martin Fowler",
@@ -369,7 +369,7 @@ Tips:
     return quotes[randomIndex];
   };
   
-  // exit komutu - kapanış animasyonu ile çıkış
+  // exit command - close terminal with animation
   const handleExit = () => {
     setIsTerminalVisible(false);
     setTimeout(() => {
@@ -377,7 +377,7 @@ Tips:
     }, 300);
   };
 
-  // Mevcut dizini alma
+  // Get current directory
   const getCurrentDirectory = () => {
     if (path === '~') return fileSystem['~'];
     
@@ -396,15 +396,15 @@ Tips:
     return current;
   };
 
-  // Otomatik tamamlama için mevcut dizindeki öğeleri alma
+  // Get items for autocompletion from current directory
   const getCompletionItems = (partial) => {
-    // Komut tamamlama
+    // Command completion
     if (!input.includes(' ')) {
       const commands = ['ls', 'cd', 'cat', 'pwd', 'echo', 'help', 'mkdir', 'touch', 'rm', 'clear', 'exit', 'date', 'version', 'fortune'];
       return commands.filter(cmd => cmd.startsWith(partial));
     }
     
-    // Dosya/dizin tamamlama
+    // File/directory completion
     const currentDir = getCurrentDirectory();
     if (!currentDir) return [];
     
@@ -413,11 +413,11 @@ Tips:
     );
   };
 
-  // Çok satırlı komut işleme
+  // Multi-line command processing
   const handleMultiLineInput = () => {
     setIsMultiLine(!isMultiLine);
     if (isMultiLine) {
-      // Çok satırlı moddan çıkış - tüm komutları işle
+      // Exit from multi-line mode - process all commands
       const fullCommand = [...multiLineBuffer, input].join('\n');
       setHistory(prev => [
         ...prev,
@@ -425,7 +425,7 @@ Tips:
         { text: fullCommand, type: 'multiline' }
       ]);
       
-      // Her satırı ayrı ayrı işle
+      // Process each line separately
       [...multiLineBuffer, input].forEach(cmd => {
         if (cmd.trim()) {
           const result = processCommand(cmd);
@@ -442,11 +442,11 @@ Tips:
     }
   };
 
-  // Komut çalıştırma
+  // Execute command
   const executeCommand = () => {
     if (!input.trim()) return;
     
-    // Çok satırlı modda ise buffere ekle
+    // In multi-line mode, add to buffer
     if (isMultiLine) {
       setMultiLineBuffer(prev => [...prev, input]);
       setInput('');
@@ -454,14 +454,14 @@ Tips:
       return;
     }
     
-    // Komut geçmişine ekle
+    // Add to command history
     setCommandHistory(prev => [input, ...prev]);
     setHistoryIndex(-1);
     
-    // Komutu ve sonucunu ekrana yaz
+    // Display command and its result
     const result = processCommand(input);
     
-    // HTML içeriği varsa onu işle
+    // If it has HTML content, process it
     if (result && typeof result === 'object' && result.html) {
       setHistory(prev => [
         ...prev,
@@ -486,7 +486,7 @@ Tips:
     setCursorPosition(0);
     setShowAutoComplete(false);
     
-    // Terminal otomatik kaydırma - geliştirilmiş versiyon
+    // Terminal auto-scroll - enhanced version
     requestAnimationFrame(() => {
       if (terminalRef.current) {
         const scrollHeight = terminalRef.current.scrollHeight;
@@ -501,35 +501,45 @@ Tips:
     });
   };
 
-  // Input değişikliği
+  // Input change
   const handleInputChange = (e) => {
     setInput(e.target.value);
     setCursorPosition(e.target.selectionStart || 0);
   };
 
-  // Klavye olayları
+  // Keyboard events
   const handleKeyDown = (e) => {
-    // Cursor pozisyonunu güncelle
+    // Cursor position update
     setCursorPosition(e.target.selectionStart || 0);
 
-    // Enter tuşu işleme
+    // Escape key - close terminal or auto-complete
+    if (e.key === 'Escape') {
+      if (showAutoComplete) {
+        setShowAutoComplete(false);
+      } else {
+        onClose();
+      }
+      return;
+    }
+
+    // Enter key processing
     if (e.key === 'Enter') {
       if (e.ctrlKey && e.shiftKey) {
         handleMultiLineInput();
       } else if (!e.shiftKey) {
-        executeCommandWithScroll(); // executeCommand yerine, ekstra scroll davranışı için
+        executeCommandWithScroll(); // Using enhanced scroll function instead of executeCommand
       }
       return;
     }
     
-    // Sol/Sağ ok tuşları - cursor pozisyonunu güncelle
+    // Left/Right arrow keys - update cursor position
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       requestAnimationFrame(() => {
         setCursorPosition(e.target.selectionStart || 0);
       });
     }
     
-    // Yukarı ok tuşu - komut geçmişinde geriye git veya otomatik tamamlama navigasyonu
+    // Up arrow key - navigate back in command history or auto-complete navigation
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (showAutoComplete && autoComplete.length > 0) {
@@ -546,7 +556,7 @@ Tips:
       return;
     }
     
-    // Aşağı ok tuşu - komut geçmişinde ileriye git veya otomatik tamamlama navigasyonu
+    // Down arrow key - navigate forward in command history or auto-complete navigation
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (showAutoComplete && autoComplete.length > 0) {
@@ -567,12 +577,12 @@ Tips:
       return;
     }
     
-    // Tab tuşu - otomatik tamamlama
+    // Tab key - auto-complete
     if (e.key === 'Tab') {
       e.preventDefault();
       
       if (showAutoComplete && autoComplete.length > 0) {
-        // Seçili otomatik tamamlama öğesini kullan
+        // Use selected auto-complete item
         const selectedItem = autoComplete[selectedAutoCompleteIndex];
         const words = input.split(' ');
         words[words.length - 1] = selectedItem;
@@ -588,31 +598,26 @@ Tips:
         const completions = getCompletionItems(lastWord);
         
         if (completions.length === 1) {
-          // Tek eşleşme varsa tamamla
+          // Single match - complete
           words[words.length - 1] = completions[0];
           setInput(words.join(' '));
           setShowAutoComplete(false);
         } else if (completions.length > 1) {
-          // Birden fazla eşleşme varsa listele
+          // Multiple matches - list
           setAutoComplete(completions);
           setSelectedAutoCompleteIndex(0);
           setShowAutoComplete(true);
         }
       }
     }
-    
-    // Escape tuşu - otomatik tamamlama penceresini kapat
-    if (e.key === 'Escape') {
-      setShowAutoComplete(false);
-    }
   };
 
-  // Terminale odaklanma
+  // Terminal focus
   useEffect(() => {
     const handleClick = () => inputRef.current?.focus();
     terminalRef.current?.addEventListener('click', handleClick);
     
-    // Terminal açıldığında input alanına odaklan
+    // Terminal opened - focus input area
     inputRef.current?.focus();
     
     return () => {
@@ -620,7 +625,7 @@ Tips:
     };
   }, []);
 
-  // Klavye kısayolu (Ctrl+`) ile terminali kapatma
+  // Keyboard shortcut (Ctrl+`) to close terminal
   useEffect(() => {
     const handleKeydown = (e) => {
       if (e.ctrlKey && e.key === '`') {
@@ -634,67 +639,67 @@ Tips:
     };
   }, [onClose]);
 
-  // Kursorun pozisyonunu doğru hesaplamak için bir fonksiyon
+  // Cursor position calculation
   const calculateCursorPosition = () => {
-    // Prompt uzunluğunu hesaplayalım
+    // Calculate prompt width
     const promptWidth = isMultiLine 
       ? `${String(multiLineBuffer.length + 1).length + 2}ch` // Multiline prompt: "1 >"
       : `${path.length + 16}ch`; // Normal prompt: "user@portfolio:~$"
     
-    // İmleç pozisyonunu hesaplayalım
+    // Calculate cursor position
     return {
-      left: `calc(${promptWidth} + ${cursorPosition}ch + 6px)` // Sağa kaydırmak için 2px offset eklendi
+      left: `calc(${promptWidth} + ${cursorPosition}ch + 6px)` // Added 6px offset to the right
     };
   };
 
-  // Terminal otomatik kaydırma için useEffect
+  // Terminal auto-scroll useEffect
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [history]);
 
-  // Terminal DOM değişikliklerini izlemek için MutationObserver
+  // Terminal DOM changes monitoring useEffect
   useEffect(() => {
     let observer;
     
-    // Scroll işlemini gerçekleştiren fonksiyon
+    // Function to force scroll to bottom
     const forceScrollToBottom = () => {
       if (terminalRef.current) {
         terminalRef.current.scrollTop = terminalRef.current.scrollHeight + 5000;
       }
     };
     
-    // Terminal hazır olduğunda
+    // When terminal is ready
     if (terminalRef.current && isTerminalVisible) {
-      // İçerik kısmını bul
+      // Find content element
       const contentElement = terminalRef.current.querySelector(`.${styles.content}`);
       
       if (contentElement) {
-        // MutationObserver oluştur
+        // Create MutationObserver
         observer = new MutationObserver(() => {
-          // Her değişiklikte zorla en alta kaydır
+          // Force scroll to bottom on every change
           forceScrollToBottom();
           
-          // Yeterince hızlı olmayabilir, gecikmeyle tekrar dene
+          // Try again with delays to ensure it works
           setTimeout(forceScrollToBottom, 10);
           setTimeout(forceScrollToBottom, 50);
           setTimeout(forceScrollToBottom, 150);
         });
         
-        // Gözlemciyi başlat
+        // Start the observer
         observer.observe(contentElement, {
           childList: true,
           subtree: true,
           characterData: true
         });
         
-        // Başlangıçta scroll yap
+        // Initial scroll
         forceScrollToBottom();
       }
     }
     
-    // Temizleme
+    // Cleanup
     return () => {
       if (observer) {
         observer.disconnect();
@@ -702,23 +707,30 @@ Tips:
     };
   }, [isTerminalVisible]);
 
-  // Son çıktıya scroll yapmak için
+  // Scroll to last output
   const scrollToLastOutput = () => {
     if (lastOutputRef.current) {
-      lastOutputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      lastOutputRef.current.scrollIntoView({ behavior: 'auto', block: 'end' });
+      
+      // Try scrolling again with timeout for reliability
+      setTimeout(() => {
+        if (lastOutputRef.current) {
+          lastOutputRef.current.scrollIntoView({ behavior: 'auto', block: 'end' });
+        }
+      }, 50);
     }
   };
   
-  // Terminal içeriği değiştiğinde otomatik scroll yap
+  // Auto-scroll on terminal content change
   useEffect(() => {
     scrollToLastOutput();
   }, [history]);
   
-  // Komut çalıştırma fonksiyonu
+  // Command execution function
   const executeCommandWithScroll = () => {
     executeCommand();
     
-    // Komut çalıştırıldıktan sonra birkaç kez scroll yapmayı dene
+    // Try scrolling multiple times after command execution
     setTimeout(scrollToLastOutput, 0);
     setTimeout(scrollToLastOutput, 50);
     setTimeout(scrollToLastOutput, 100);
