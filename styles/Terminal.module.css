@@ -17,6 +17,18 @@
   transform: translate(-50%, -50%);
   width: 80%;
   z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.terminalVisible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.terminalHidden {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.95);
 }
 
 .header {
@@ -39,6 +51,11 @@
   border-radius: 50%;
   margin-right: 8px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controls span:hover {
+  transform: scale(1.1);
 }
 
 .close {
@@ -64,31 +81,75 @@
   flex-grow: 1;
   padding: 10px;
   overflow-y: auto;
+  overflow-x: hidden;
   line-height: 1.4;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  max-height: calc(100% - 40px);
+  height: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Terminal content'in son elemanı için ekstra boşluk */
+.content > div:last-child {
+  margin-bottom: 20px;
+}
+
+/* Son output görünmesini sağla */
+.output:last-of-type {
+  padding-bottom: 20px;
 }
 
 .system {
   color: #6a9955;
   margin-bottom: 10px;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .command {
   color: #dcdcaa;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.commandHighlighted {
+  animation: fadeIn 0.2s ease-out;
 }
 
 .output {
   color: #cccccc;
   white-space: pre-wrap;
   margin-bottom: 10px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.multiline {
+  color: #ce9178;
+  white-space: pre-wrap;
+  background-color: #1e1e1e;
+  padding: 8px;
+  border-radius: 3px;
+  border-left: 2px solid #569cd6;
+  margin-bottom: 10px;
 }
 
 .inputLine {
   display: flex;
   align-items: center;
+  position: relative;
+  width: 100%;
 }
 
 .prompt {
   color: #569cd6;
+  margin-right: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.multilinePrompt {
+  color: #b5cea8;
   margin-right: 5px;
 }
 
@@ -99,9 +160,40 @@
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  flex-grow: 1;
   padding: 0;
   margin: 0;
+  caret-color: transparent;
+  position: relative;
+  flex-grow: 1;
+  width: auto;
+  z-index: 1;
+}
+
+.multilineInput {
+  color: #ce9178;
+}
+
+/* Yanıp sönen imleç */
+.cursor {
+  position: absolute;
+  height: 16px;
+  width: 6px;
+  background-color: #ffffff;
+  animation: blink 1s step-end infinite;
+  pointer-events: none;
+  bottom: 2px;
+  z-index: 2;
+  border-radius: 1px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dirColor {
@@ -110,6 +202,20 @@
 }
 
 .fileColor {
+  color: #ce9178;
+}
+
+/* Sözdizimi vurgulaması */
+.commandColor {
+  color: #569cd6;
+  font-weight: bold;
+}
+
+.optionColor {
+  color: #b5cea8;
+}
+
+.stringColor {
   color: #ce9178;
 }
 
@@ -125,15 +231,22 @@
   margin-top: 5px;
   border-radius: 3px;
   z-index: 9999999;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .autoCompleteItem {
   padding: 4px 8px;
   cursor: pointer;
+  transition: background-color 0.1s ease;
 }
 
 .autoCompleteItem:hover {
   background-color: #2a2d2e;
+}
+
+.selectedItem {
+  background-color: #3a3d3e;
+  border-left: 2px solid #569cd6;
 }
 
 .overlay {
@@ -144,6 +257,36 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999998;
+  backdrop-filter: blur(2px);
+  animation: fadeBackdrop 0.3s ease-out;
+}
+
+@keyframes fadeBackdrop {
+  from { backdrop-filter: blur(0); opacity: 0; }
+  to { backdrop-filter: blur(2px); opacity: 1; }
+}
+
+/* VS Code stil scrollbar */
+.content::-webkit-scrollbar {
+  width: 14px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #424242;
+  border: 3px solid #1e1e1e;
+  border-radius: 7px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+.content::-webkit-scrollbar-corner {
+  background: #1e1e1e;
 }
 
 @media (max-width: 768px) {
