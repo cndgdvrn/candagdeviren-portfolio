@@ -5,7 +5,7 @@ const Terminal = ({ onClose }) => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
     { text: 'Can Dağdeviren Terminal v1.0.0', type: 'system' },
-    { text: 'Terminal\'e hoş geldiniz. Komutları görmek için "help" yazın.', type: 'system' }
+    { text: 'Welcome to Terminal. Type "help" to see available commands.', type: 'system' }
   ]);
   const [path, setPath] = useState('~');
   const [commandHistory, setCommandHistory] = useState([]);
@@ -20,7 +20,7 @@ const Terminal = ({ onClose }) => {
     '~': {
       type: 'directory',
       content: {
-        'projeler': { 
+        'projects': { 
           type: 'directory', 
           content: {
             'portfolio': {
@@ -28,7 +28,7 @@ const Terminal = ({ onClose }) => {
               content: {
                 'README.md': {
                   type: 'file',
-                  content: '# VS Code Portföy\n\nBu VS Code temalı portföy sitesi Next.js ile geliştirildi ve Vercel üzerinde deploy edildi.'
+                  content: '# VS Code Portfolio\n\nThis VS Code themed portfolio website was developed with Next.js and deployed on Vercel.'
                 },
                 'tech-stack.txt': {
                   type: 'file',
@@ -39,7 +39,7 @@ const Terminal = ({ onClose }) => {
             'terminal': {
               type: 'directory',
               content: {
-                'komutlar.txt': {
+                'commands.txt': {
                   type: 'file',
                   content: 'ls, cd, cat, mkdir, touch, rm, pwd, echo, clear, help, exit'
                 }
@@ -47,26 +47,26 @@ const Terminal = ({ onClose }) => {
             }
           }
         },
-        'hakkimda': { 
+        'about': { 
           type: 'directory',
           content: {
             'cv.txt': {
               type: 'file',
-              content: 'İsim: Can Dağdeviren\nPozisyon: Backend Geliştirici\nTecrübe: 3 yıl'
+              content: 'Name: Can Dağdeviren\nPosition: Backend Developer\nExperience: 3 years'
             },
-            'yetenekler.txt': {
+            'skills.txt': {
               type: 'file',
               content: 'JavaScript\nNode.js\nReact\nNext.js\nMongoDB\nPostgreSQL'
             }
           }
         },
-        'iletisim.txt': { 
+        'contact.txt': { 
           type: 'file', 
-          content: 'E-posta: candagdevirenn@gmail.com\nGitHub: cndgdvrn\nLinkedIn: candagdeviren' 
+          content: 'Email: candagdevirenn@gmail.com\nGitHub: cndgdvrn\nLinkedIn: candagdeviren' 
         },
-        'hosgeldin.txt': {
+        'welcome.txt': {
           type: 'file',
-          content: 'Merhaba, ben Can Dağdeviren! Backend geliştirici olarak çalışıyorum ve yeni teknolojileri öğrenmeyi seviyorum.'
+          content: 'Hello, I am Can Dağdeviren! I work as a backend developer and love learning new technologies.'
         }
       }
     }
@@ -105,7 +105,7 @@ const Terminal = ({ onClose }) => {
       case '':
         return '';
       default:
-        return `${command}: komut bulunamadı. Komutları görmek için 'help' yazın.`;
+        return `${command}: command not found. Type 'help' to see available commands.`;
     }
   };
 
@@ -113,7 +113,7 @@ const Terminal = ({ onClose }) => {
   const handleLs = (args) => {
     const currentDir = getCurrentDirectory();
     if (!currentDir || currentDir.type !== 'directory') {
-      return 'Geçerli bir dizin değil';
+      return 'Invalid directory';
     }
 
     const hasL = args.includes('-l');
@@ -161,13 +161,13 @@ const Terminal = ({ onClose }) => {
       return '';
     }
 
-    return `cd: ${targetPath}: Böyle bir dizin yok`;
+    return `cd: ${targetPath}: No such directory`;
   };
 
   // cat komutu
   const handleCat = (args) => {
     if (args.length < 2) {
-      return 'Kullanım: cat <dosya_adı>';
+      return 'Usage: cat <file_name>';
     }
 
     const fileName = args[1];
@@ -177,7 +177,7 @@ const Terminal = ({ onClose }) => {
       return currentDir.content[fileName].content;
     }
 
-    return `cat: ${fileName}: Böyle bir dosya yok`;
+    return `cat: ${fileName}: No such file`;
   };
 
   // pwd komutu
@@ -192,34 +192,34 @@ const Terminal = ({ onClose }) => {
 
   // help komutu
   const handleHelp = () => {
-    return `Kullanılabilir komutlar:
-  ls [-l]                - Dizin içeriğini listele (-l uzun format)
-  cd <dizin>             - Dizin değiştir
-  cat <dosya>            - Dosya içeriğini göster
-  pwd                    - Mevcut dizin yolunu göster
-  echo <metin>           - Metni ekrana yazdır
-  mkdir <dizin_adı>      - Yeni dizin oluştur
-  touch <dosya_adı>      - Yeni dosya oluştur
-  rm [-r] <dosya/dizin>  - Dosya veya dizin sil (-r dizinler için)
-  clear                  - Terminali temizle
-  exit                   - Terminali kapat
-  help                   - Yardım menüsünü göster
+    return `Available commands:
+  ls [-l]                - List directory contents (-l for long format)
+  cd <directory>         - Change directory
+  cat <file>             - Display file content
+  pwd                    - Print working directory
+  echo <text>            - Print text
+  mkdir <dir_name>       - Create new directory
+  touch <file_name>      - Create new file
+  rm [-r] <file/dir>     - Remove file or directory (-r for directories)
+  clear                  - Clear terminal
+  exit                   - Close terminal
+  help                   - Show this help menu
   
-İpucu: Tab tuşu ile otomatik tamamlama yapabilirsiniz.
-Klavye kısayolu: Terminali açmak/kapatmak için Ctrl+\` kullanabilirsiniz.`;
+Tip: Use Tab key for auto-completion.
+Keyboard shortcut: Use Ctrl+\` to open/close the terminal.`;
   };
 
   // mkdir komutu - yeni dizin oluşturma
   const handleMkdir = (args) => {
     if (args.length < 2) {
-      return 'Kullanım: mkdir <dizin_adı>';
+      return 'Usage: mkdir <dir_name>';
     }
 
     const dirName = args[1];
     const currentDir = getCurrentDirectory();
 
     if (currentDir.content[dirName]) {
-      return `mkdir: ${dirName}: Dosya veya dizin zaten mevcut`;
+      return `mkdir: ${dirName}: File or directory already exists`;
     }
 
     // Yeni dizin oluştur
@@ -228,13 +228,13 @@ Klavye kısayolu: Terminali açmak/kapatmak için Ctrl+\` kullanabilirsiniz.`;
       content: {}
     };
 
-    return `"${dirName}" dizini oluşturuldu`;
+    return `Directory "${dirName}" created`;
   };
 
   // touch komutu - yeni dosya oluşturma
   const handleTouch = (args) => {
     if (args.length < 2) {
-      return 'Kullanım: touch <dosya_adı>';
+      return 'Usage: touch <file_name>';
     }
 
     const fileName = args[1];
@@ -256,7 +256,7 @@ Klavye kısayolu: Terminali açmak/kapatmak için Ctrl+\` kullanabilirsiniz.`;
   // rm komutu - dosya/dizin silme
   const handleRm = (args) => {
     if (args.length < 2) {
-      return 'Kullanım: rm [-r] <dosya/dizin>';
+      return 'Usage: rm [-r] <file/directory>';
     }
 
     let isRecursive = false;
@@ -266,18 +266,18 @@ Klavye kısayolu: Terminali açmak/kapatmak için Ctrl+\` kullanabilirsiniz.`;
       isRecursive = true;
       target = args[2];
       if (!target) {
-        return 'Kullanım: rm -r <dizin>';
+        return 'Usage: rm -r <directory>';
       }
     }
 
     const currentDir = getCurrentDirectory();
 
     if (!currentDir.content[target]) {
-      return `rm: ${target}: Böyle bir dosya veya dizin yok`;
+      return `rm: ${target}: No such file or directory`;
     }
 
     if (currentDir.content[target].type === 'directory' && !isRecursive) {
-      return `rm: ${target}: Bir dizini silmek için -r seçeneğini kullanın`;
+      return `rm: ${target}: Use -r option to remove a directory`;
     }
 
     // Dosya/dizini sil
