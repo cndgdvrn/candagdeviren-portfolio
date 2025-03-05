@@ -5,7 +5,8 @@ const Terminal = ({ onClose }) => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
     { text: 'Can Dağdeviren Terminal v1.0.0', type: 'system' },
-    { text: 'Welcome to Terminal. Type "help" to see available commands.', type: 'system' }
+    { text: 'Welcome to Terminal. Type "help" to see available commands.', type: 'system' },
+    { text : 'Press "ESC" to close the terminal.' , type: 'system' }
   ]);
   const [path, setPath] = useState('~');
   const [commandHistory, setCommandHistory] = useState([]);
