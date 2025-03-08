@@ -4,7 +4,7 @@ const contactItems = [
   {
     tag: 'h1',
     title: 'Who am I?',
-    content: 'I am a software developer with a passion for creating innovative solutions. I am currently pursuing a master\'s degree in computer science at the Eskisehir Technical University. I am always looking for new challenges and opportunities to grow as a developer'
+    content: 'I am a software developer with a passion for creating innovative solutions. I graduated from Eskişehir Technical University Computer Engineering Department. I am always looking for new challenges and opportunities to grow as a developer'
   },
   {
     tag: 'h2',

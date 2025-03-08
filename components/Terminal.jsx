@@ -64,11 +64,11 @@ const Terminal = ({ onClose }) => {
           content: {
             'cv.txt': {
               type: 'file',
-              content: 'Name: Can Dağdeviren\nPosition: Backend Developer\nExperience: 3 years'
+              content: 'Name: Can Dağdeviren\nPosition: Backend Developer\nExperience: 1.5 years'
             },
             'skills.txt': {
               type: 'file',
-              content: 'JavaScript\nNode.js\nReact\nNext.js\nMongoDB\nPostgreSQL'
+              content: 'Microservices\nJava\nSpring Boot\nTypescript\nNode.js\nPostgreSQL\nDocker\nKubernetes\nMongoDB\nRabbitMQ\nRedis\nGit'
             }
           }
         },
